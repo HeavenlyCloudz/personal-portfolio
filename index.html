@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anie Udofia · DetectED</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ---------- CSS VARIABLES (Light & Dark) ---------- */
+    :root {
+      --bg-primary: #f8faff;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --bg-nav: rgba(248, 250, 255, 0.85);
+      --text-primary: #0b0f1e;
+      --text-secondary: #3a405b;
+      --text-muted: #6b7299;
+      --accent-blue: #4f6ef7;
+      --accent-purple: #8b5cf6;
+      --accent-yellow: #fbbf24;
+      --accent-white: #ffffff;
+      --border: #dce1f0;
+      --shadow: 0 8px 30px rgba(79, 110, 247, 0.10);
+      --radius: 20px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --gradient-hero: linear-gradient(135deg, #4f6ef7, #8b5cf6);
+      --gradient-name: linear-gradient(135deg, #4f6ef7, #8b5cf6, #fbbf24);
+      --glow: rgba(79, 110, 247, 0.25);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0a0c18;
+      --bg-secondary: #11162b;
+      --bg-card: #181f33;
+      --bg-nav: rgba(10, 12, 24, 0.88);
+      --text-primary: #f0f4ff;
+      --text-secondary: #b0bddb;
+      --text-muted: #7a88b0;
+      --border: #28304a;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      --glow: rgba(79, 110, 247, 0.30);
+    }
+
+    /* ---------- RESET ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.7;
+      transition: background 0.4s, color 0.4s;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    a:hover {
+      color: var(--accent-purple);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---------- SCROLLBAR ---------- */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-blue);
+      border-radius: 10px;
+    }
+
+    /* ---------- NAV ---------- */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      background: var(--bg-nav);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--gradient-name);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: gradShift 4s ease infinite;
+      letter-spacing: -0.5px;
+    }
+    @keyframes gradShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 0.9rem;
+      position: relative;
+      transition: var(--transition);
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-name);
+      transition: var(--transition);
+    }
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      background: var(--gradient-hero);
+      color: #fff !important;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    .nav-cta::after {
+      display: none !important;
+    }
+    .nav-cta:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 20px var(--glow);
+      color: #fff !important;
+    }
+
+    /* ---------- THEME TOGGLE ---------- */
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 20px var(--glow);
+    }
+    .theme-toggle i {
+      font-size: 1rem;
+      color: var(--accent-yellow);
+    }
+    .theme-toggle .fa-moon {
+      color: var(--accent-blue);
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 60px;
+      align-items: center;
+      padding: 80px 0 60px;
+      min-height: 80vh;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(79, 110, 247, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(79, 110, 247, 0.10);
+      color: var(--accent-blue);
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+      border: 1px solid rgba(79, 110, 247, 0.15);
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.8rem, 7vw, 4.8rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    /* ---------- COOL NAME ANIMATION ---------- */
+    .glitch-name {
+      display: inline-block;
+      position: relative;
+      background: var(--gradient-name);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% 300%;
+      animation: gradShift 4s ease infinite, glitchSkew 3s infinite linear alternate;
+    }
+    @keyframes glitchSkew {
+      0% { transform: skew(0deg); }
+      10% { transform: skew(2deg); }
+      20% { transform: skew(-1deg); }
+      30% { transform: skew(0deg); }
+      100% { transform: skew(0deg); }
+    }
+    .glitch-name::before,
+    .glitch-name::after {
+      content: 'Anie Udofia';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-name);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% 300%;
+      animation: gradShift 4s ease infinite;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .glitch-name::before {
+      animation: glitch1 2.5s infinite linear alternate-reverse;
+    }
+    .glitch-name::after {
+      animation: glitch2 3s infinite linear alternate-reverse;
+    }
+    @keyframes glitch1 {
+      0% { transform: translate(0); clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%); }
+      20% { transform: translate(-3px, 2px); clip-path: polygon(0 20%, 100% 20%, 100% 50%, 0 50%); }
+      40% { transform: translate(3px, -2px); clip-path: polygon(0 40%, 100% 40%, 100% 70%, 0 70%); }
+      60% { transform: translate(-2px, 3px); clip-path: polygon(0 60%, 100% 60%, 100% 90%, 0 90%); }
+      80% { transform: translate(2px, -3px); clip-path: polygon(0 80%, 100% 80%, 100% 100%, 0 100%); }
+      100% { transform: translate(0); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+    }
+    @keyframes glitch2 {
+      0% { transform: translate(0); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+      25% { transform: translate(4px, -2px); clip-path: polygon(0 10%, 100% 10%, 100% 40%, 0 40%); }
+      50% { transform: translate(-4px, 2px); clip-path: polygon(0 30%, 100% 30%, 100% 60%, 0 60%); }
+      75% { transform: translate(2px, 4px); clip-path: polygon(0 50%, 100% 50%, 100% 80%, 0 80%); }
+      100% { transform: translate(0); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+    }
+
+    .hero-tagline {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-bottom: 28px;
+      border-left: 4px solid var(--accent-blue);
+      padding-left: 20px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn-primary {
+      background: var(--gradient-hero);
+      color: #fff;
+      padding: 13px 30px;
+      border-radius: 40px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px var(--glow);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 13px 30px;
+      border-radius: 40px;
+      font-weight: 500;
+      transition: var(--transition);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-outline:hover {
+      border-color: var(--accent-blue);
+      background: rgba(79, 110, 247, 0.06);
+      transform: translateY(-3px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Profile Card */
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .profile-card:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 12px 40px var(--glow);
+    }
+    .profile-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: var(--gradient-hero);
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 0 0 4px var(--bg-primary), 0 0 0 6px var(--accent-blue);
+    }
+    .profile-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 2px;
+    }
+    .profile-card .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    .profile-badge {
+      display: inline-block;
+      background: var(--gradient-hero);
+      color: #fff;
+      padding: 4px 18px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 12px;
+      letter-spacing: 0.04em;
+    }
+    .profile-social {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .profile-social a {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+    .profile-social a:hover {
+      color: var(--accent-blue);
+      transform: translateY(-3px);
+    }
+
+    /* ---------- SECTION COMMON ---------- */
+    .section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+      transition: border-color 0.4s;
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 44px;
+    }
+    .section-label {
+      color: var(--accent-blue);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .section-sub {
+      color: var(--text-secondary);
+      max-width: 640px;
+    }
+
+    /* ---------- ABOUT (DetectED) ---------- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+    }
+    .about-text .highlight {
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+    .about-text .highlight-purple {
+      color: var(--accent-purple);
+      font-weight: 600;
+    }
+
+    .about-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .about-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .about-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+    }
+    .about-card i {
+      font-size: 2rem;
+      color: var(--accent-blue);
+      margin-bottom: 10px;
+    }
+    .about-card h4 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .about-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* ---------- EXPERIENCE GRID ---------- */
+    .exp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .exp-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: var(--transition);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--gradient-hero);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .exp-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent-blue);
+      box-shadow: var(--shadow);
+    }
+    .exp-card:hover::before {
+      opacity: 1;
+    }
+    .exp-card .icon {
+      font-size: 2rem;
+      color: var(--accent-blue);
+      margin-bottom: 12px;
+    }
+    .exp-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+    .exp-card .exp-meta {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .exp-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      line-height: 1.7;
+    }
+    .exp-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .exp-tags span {
+      background: rgba(79, 110, 247, 0.10);
+      color: var(--accent-blue);
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    /* ---------- LEADERSHIP ---------- */
+    .lead-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    /* ---------- SKILLS ---------- */
+    .skills-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .skill-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .skill-pill i {
+      color: var(--accent-blue);
+      font-size: 1rem;
+      width: 20px;
+    }
+    .skill-pill:hover {
+      border-color: var(--accent-blue);
+      background: rgba(79, 110, 247, 0.06);
+      transform: scale(1.05);
+    }
+
+    /* ---------- AWARDS ---------- */
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .award-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: var(--transition);
+    }
+    .award-item:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-4px);
+      background: rgba(79, 110, 247, 0.04);
+    }
+    .award-item i {
+      color: var(--accent-blue);
+      font-size: 1.4rem;
+      width: 32px;
+      text-align: center;
+    }
+    .award-item .award-text {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .award-item .award-source {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* ---------- CONTACT ---------- */
+    .contact-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 50px 40px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+      transition: var(--transition);
+    }
+    .contact-box:hover {
+      border-color: var(--accent-blue);
+    }
+    .contact-box h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .contact-box p {
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .contact-links a {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      padding: 12px 24px;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+    .contact-links a:hover {
+      border-color: var(--accent-blue);
+      background: rgba(79, 110, 247, 0.06);
+      transform: translateY(-4px);
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      transition: border-color 0.4s;
+    }
+    footer i {
+      color: var(--accent-yellow);
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .about-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 40px 0;
+      }
+      .hero-stats {
+        gap: 28px;
+      }
+      .nav-links {
+        gap: 14px;
+      }
+      .nav-cta {
+        padding: 6px 16px;
+        font-size: 0.8rem;
+      }
+      .contact-box {
+        padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .navbar {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .nav-links a:not(.nav-cta):not(.theme-toggle) {
+        display: none;
+      }
+      .hero-content h1 {
+        font-size: 2.4rem;
+      }
+      .profile-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 2.2rem;
+      }
+      .about-cards {
+        grid-template-columns: 1fr;
+      }
+      .theme-toggle span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar container">
+    <a href="#" class="logo">AU</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Research</a>
+      <a href="#leadership">Leadership</a>
+      <a href="#skills">Skills</a>
+      <a href="#awards">Awards</a>
+      <a href="#contact" class="nav-cta"><i class="fas fa-paper-plane"></i> Contact</a>
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <i class="fas fa-sun" id="themeIcon"></i>
+        <span id="themeLabel">Light</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero container" id="home">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-flask"></i> 96.4% GPA · Grade 11 · Calgary, AB
+      </div>
+      <h1>Hello, I'm <span class="glitch-name">Anie Udofia</span></h1>
+      <p class="hero-tagline">
+        Physics-informed AI · Medical Imaging · Youth-led Health Innovation
+      </p>
+      <div class="hero-buttons">
+        <a href="#about" class="btn-primary"><i class="fas fa-heart"></i> About DetectED</a>
+        <button id="greetBtn" class="btn-outline"><i class="fas fa-hand-peace"></i> Say Hello</button>
+      </div>
+      <div id="greetMessage" style="margin-top:18px; min-height:28px; font-weight:500; color:var(--accent-blue);"></div>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-number" id="statPapers">1</span><span class="stat-label"><i class="fas fa-file-alt"></i> Publication</span></div>
+        <div class="stat-item"><span class="stat-number" id="statPatents">2</span><span class="stat-label"><i class="fas fa-microchip"></i> Medical Devices</span></div>
+        <div class="stat-item"><span class="stat-number" id="statHours">350</span><span class="stat-label"><i class="fas fa-heart"></i> Volunteer Hours</span></div>
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-avatar">AU</div>
+      <h3>Anie Udofia</h3>
+      <p class="subtitle">William Aberhart HS · French Immersion</p>
+      <span class="profile-badge"><i class="fas fa-trophy"></i> CWSF Silver Medalist</span>
+      <div class="profile-social">
+        <a href="mailto:mails4anietor@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / DETECTED -->
+  <section class="section container" id="about">
+    <div class="section-header">
+      <span class="section-label"><i class="fas fa-heart"></i> Health Equity & Innovation</span>
+      <h2 class="section-title">About DetectED</h2>
+      <p class="section-sub">Bridging the gap between STEM education and healthcare innovation through youth-led action.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          <span class="highlight">DetectED</span> is a youth-led nonprofit organization I founded to advance
+          <span class="highlight-purple">health technology education</span>, disease detection literacy,
+          and biomedical innovation among students. Through hands-on workshops, educational kits, mentorship
+          programs, and community partnerships, DetectED empowers youth to explore how engineering, AI,
+          and healthcare intersect to address real-world medical challenges.
+        </p>
+        <p>
+          Our mission is to equip students with the knowledge, skills, and opportunities needed to understand,
+          design, and communicate the next generation of health technologies. We envision a future where
+          students are not just consumers of medical technology, but <span class="highlight">contributors
+          to healthcare innovation</span>, scientific discovery, and equitable disease detection solutions.
+        </p>
+        <p>
+          To date, DetectED has secured a <span class="highlight">$3,000 AIFY Community Impact Grant</span>
+          (Canada Service Corps), delivered the Health Innovation Summer Series (August 2026) to 60+ registered
+          Black and racialized youth in partnership with the Power of Early Vision Foundation and ZCUSA,
+          built clinical partnerships with 5+ organizations including the <span class="highlight">Alberta
+          Children's Hospital</span>, and scaled to a William Aberhart STEM Club chapter with 25+ active members.
+        </p>
+        <a href="https://detectedu.wixsite.com/detected" target="_blank" rel="noopener" class="btn-primary" style="margin-top:12px; display:inline-flex;">
+          <i class="fas fa-hands-helping"></i> Get involved
+        </a>
+      </div>
+      <div class="about-cards">
+        <div class="about-card">
+          <i class="fas fa-microscope"></i>
+          <h4>Health Tech Education</h4>
+          <p>Workshops on AI, medical imaging, and disease detection systems</p>
+        </div>
+        <div class="about-card">
+          <i class="fas fa-tools"></i>
+          <h4>Innovation Kits</h4>
+          <p>Low-cost educational kits using micro:bits for medical hardware prototyping</p>
+        </div>
+        <div class="about-card">
+          <i class="fas fa-users"></i>
+          <h4>Youth Mentorship</h4>
+          <p>Project guidance, science fair prep, and micro-grant funding</p>
+        </div>
+        <div class="about-card">
+          <i class="fas fa-newspaper"></i>
+          <h4>Science Communication</h4>
+          <p>Accessible content on medical tech, AI, and healthcare systems</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE / RESEARCH -->
+  <section class="section container" id="experience">
+    <div class="section-header">
+      <span class="section-label"><i class="fas fa-vial"></i> Research & Innovation</span>
+      <h2 class="section-title">Where I contribute</h2>
+      <p class="section-sub">Physics-informed AI, medical device prototyping, and translational health research.</p>
+    </div>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <div class="icon"><i class="fas fa-microchip"></i></div>
+        <h3>Hypoxify Labs</h3>
+        <div class="exp-meta"><i class="fas fa-calendar-alt"></i> June 2026 – Present · Lead Researcher &amp; Inventor</div>
+        <p>Designed Hypoxify MATA, a low-cost ($1,000 USD) non-invasive wearable thermoacoustic ring array powered by Raspberry Pi 5 to map deep-tissue pancreatic tumor hypoxia and stratify cancer aggressiveness. Built the Hypoxify Annotation Suite (physics-guided SAM adaptation), cutting manual clinical annotation from 30+ min to &lt;10 sec per volume. Mentored by Dr. Elise Fear, NSERC Chair in Microwave Imaging, University of Calgary.</p>
+        <div class="exp-tags"><span>Thermoacoustic Imaging</span><span>PINNs</span><span>SAM</span><span>Dr. Elise Fear</span></div>
+      </div>
+      <div class="exp-card">
+        <div class="icon"><i class="fas fa-lungs"></i></div>
+        <h3>THORACIS AI · Operation Oracle</h3>
+        <div class="exp-meta"><i class="fas fa-calendar-alt"></i> 2025 – 2026 · Independent Researcher</div>
+        <p>Designed a low-cost multimodal lung screening device integrating microwave signal modeling and acoustic analysis for early-stage pulmonary disease tracking. Modeled compact Vivaldi antenna arrays against dielectric properties of healthy vs. diseased lung tissue using dynamic respiratory models and ex vivo tissue phantoms. Earned CAYIA Outstanding Award ($5,000), CWSF Silver Medal &amp; National Finalist, and CYSF Gold Medal + Pfizer Oncology Special Award.</p>
+        <div class="exp-tags"><span>Vivaldi Arrays</span><span>Microwave Modeling</span><span>CAYIA</span><span>CWSF</span><span>CYSF</span></div>
+      </div>
+      <div class="exp-card">
+        <div class="icon"><i class="fas fa-skin"></i></div>
+        <h3>NOMA AI · Operation Oracle</h3>
+        <div class="exp-meta"><i class="fas fa-calendar-alt"></i> 2025 – 2026 · Independent Researcher</div>
+        <p>Trained a multi-class deep learning model on self-curated dermatological datasets to differentiate malignant and benign lesions, with a point-of-care diagnostic prototype and bias-mitigation methods. Published an open-source Kaggle dataset and model bias report (1,700+ views, 250+ downloads) analyzing discrepancies across racialized skin types. Earned CAYIA Outstanding Award ($5,000), CWSF Silver Medal &amp; National Finalist, and CYSF Gold Medal + Pfizer Oncology Special Award.</p>
+        <div class="exp-tags"><span>Kaggle</span><span>Ethical AI</span><span>CAYIA</span><span>CWSF</span><span>CYSF</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERSHIP -->
+  <section class="section container" id="leadership">
+    <div class="section-header">
+      <span class="section-label"><i class="fas fa-users-cog"></i> Leadership & Community</span>
+      <h2 class="section-title">Leadership & clinical impact</h2>
+      <p class="section-sub">Youth-led health initiatives, policy advisory, and community mentorship.</p>
+    </div>
+    <div class="lead-grid">
+      <div class="exp-card">
+        <div class="icon"><i class="fas fa-seedling"></i></div>
+        <h3>DetectED Initiative</h3>
+        <div class="exp-meta"><i class="fas fa-calendar-alt"></i> 2025 – Present · Founder &amp; Executive Director</div>
+        <p>Secured a $3,000 AIFY grant to scale city-wide operations. Co-founded and executed the Health Innovation Summer Series (August 2026) with the Power of Early Vision Foundation and ZCUSA, teaching medical hardware prototyping (micro:bits) and ethical health AI to 60+ Black and racialized youth. Partnered with 5+ organizations including the Alberta Children's Hospital. Founded the William Aberhart STEM Club chapter (25+ members).</p>
+        <div class="exp-tags"><span>$3,000 Grant</span><span>100+ Youth Impacted</span><span>Alberta Children's Hospital</span></div>
+      </div>
+      <div class="exp-card">
+        <div class="icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>RCMP National Youth Advisory Committee</h3>
+        <div class="exp-meta"><i class="fas fa-calendar-alt"></i> 2025 – 2026 · National Committee Member</div>
+        <p>Selected as one of a limited group of youth representatives across Canada to provide direct strategic perspectives on community safety, data ethics, and public trust during national consultations with senior RCMP leadership.</p>
+        <div class="exp-tags"><span>Policy Advisory</span><span>Data Ethics</span><span>Public Trust</span></div>
+      </div>
+      <div class="exp-card">
+        <div class="icon"><i class="fas fa-stethoscope"></i></div>
+        <h3>Doctor's Club</h3>
+        <div class="exp-meta"><i class="fas fa-calendar-alt"></i> 2024 – 2025 · Founder &amp; President</div>
+        <p>Created a foundational medical exploration framework impacting over 100 junior high students; organized structured seminars covering clinical diagnostics, bioethics, and emerging medical career pathways.</p>
+        <div class="exp-tags"><span>100+ Students</span><span>Bioethics</span><span>Mentorship</span></div>
+      </div>
+      <div class="exp-card">
+        <div class="icon"><i class="fas fa-hands-helping"></i></div>
+        <h3>Power of Early Vision Foundation</h3>
+        <div class="exp-meta"><i class="fas fa-calendar-alt"></i> Youth Representative</div>
+        <p>Authoring grant proposals and serving as a keynote youth speaker at public events. Community volunteering also includes Youth Central &amp; Calgary Public Library (literacy and youth engagement) and Harvest Hills Alliance Church (Kids Ministry student teacher).</p>
+        <div class="exp-tags"><span>Grant Writing</span><span>Keynote Speaker</span><span>350+ Hours</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section container" id="skills">
+    <div class="section-header">
+      <span class="section-label"><i class="fas fa-cog"></i> Technical & Professional</span>
+      <h2 class="section-title">Skills & expertise</h2>
+    </div>
+    <div class="skills-wrapper">
+      <span class="skill-pill"><i class="fab fa-python"></i> Python · ML</span>
+      <span class="skill-pill"><i class="fas fa-brain"></i> Physics-Informed NN</span>
+      <span class="skill-pill"><i class="fas fa-wave-square"></i> Microwave Signal Modeling</span>
+      <span class="skill-pill"><i class="fas fa-cube"></i> 3D Prototyping</span>
+      <span class="skill-pill"><i class="fas fa-microscope"></i> Biomedical Research</span>
+      <span class="skill-pill"><i class="fas fa-robot"></i> Segment Anything Model</span>
+      <span class="skill-pill"><i class="fas fa-balance-scale"></i> Algorithmic Bias Mitigation</span>
+      <span class="skill-pill"><i class="fas fa-user-shield"></i> Data Privacy Auditing</span>
+      <span class="skill-pill"><i class="fas fa-scroll"></i> Policy Research</span>
+      <span class="skill-pill"><i class="fas fa-pen-fancy"></i> Analytical Essay Writing</span>
+      <span class="skill-pill"><i class="fas fa-french"></i> French (Fluent)</span>
+      <span class="skill-pill"><i class="fas fa-heartbeat"></i> Standard First Aid · CPR-C · AED</span>
+      <span class="skill-pill"><i class="fas fa-users"></i> Leadership & Mentorship</span>
+      <span class="skill-pill"><i class="fas fa-hand-holding-heart"></i> Health Equity</span>
+    </div>
+  </section>
+
+  <!-- AWARDS -->
+  <section class="section container" id="awards">
+    <div class="section-header">
+      <span class="section-label"><i class="fas fa-trophy"></i> Recognition</span>
+      <h2 class="section-title">Awards & honors</h2>
+    </div>
+    <div class="awards-grid">
+      <div class="award-item"><i class="fas fa-globe-americas"></i><div><div class="award-text">Breakthrough Junior Challenge</div><div class="award-source">International Finalist (Top 15) · 2025</div></div></div>
+      <div class="award-item"><i class="fas fa-medal"></i><div><div class="award-text">Canada-Wide Science Fair</div><div class="award-source">Silver Medalist · National Finalist · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-university"></i><div><div class="award-text">Shad Canada</div><div class="award-source">National Scholar · $3,995 Scholarship · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-hand-holding-usd"></i><div><div class="award-text">AIFY Community Impact Grant</div><div class="award-source">$3,000 · Canada Service Corps · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-flask"></i><div><div class="award-text">Calgary Youth Science Fair</div><div class="award-source">Gold Medal + Pfizer Oncology Award · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-lightbulb"></i><div><div class="award-text">Canada Youth Innovation Competition (CAYIA)</div><div class="award-source">Outstanding Award & Excellence in Healthcare · $5,000 · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-book-open"></i><div><div class="award-text">John Locke Essay Competition</div><div class="award-source">Very High Commendation (Top &lt;1% of 100,000+) · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-pen-fancy"></i><div><div class="award-text">Alberta Champions Writing</div><div class="award-source">1st Place · 2025</div></div></div>
+      <div class="award-item"><i class="fas fa-feather-alt"></i><div><div class="award-text">Brandon Langhjelm Memorial Essay</div><div class="award-source">Honorable Mention (National) · 2025</div></div></div>
+      <div class="award-item"><i class="fas fa-video"></i><div><div class="award-text">World of 8 Billion Video Contest</div><div class="award-source">Honorable Mention (International) · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-star"></i><div><div class="award-text">Kiwanis WATCH Award</div><div class="award-source">School-Wide Leadership Selection (1 of 10) · 2025</div></div></div>
+      <div class="award-item"><i class="fas fa-music"></i><div><div class="award-text">Alberta Wind Symphony</div><div class="award-source">Provincial Performer · 2025, 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-award"></i><div><div class="award-text">Cambrooks College Honour Roll</div><div class="award-source">Junior High School Category · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-users"></i><div><div class="award-text">Izu Nwachukwu Foundation Leadership Excellence</div><div class="award-source">NCAC · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-handshake"></i><div><div class="award-text">President's Community Champions Award</div><div class="award-source">AKSANC · 2026</div></div></div>
+      <div class="award-item"><i class="fas fa-certificate"></i><div><div class="award-text">NGSSH STEM Youth Achievement Award</div><div class="award-source">Nigerian South-South Heritage Community · 2026</div></div></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section container" id="contact">
+    <div class="contact-box">
+      <h2>Let's connect</h2>
+      <p>I'm always open to research collaborations, mentorship, or just a conversation about AI in healthcare.</p>
+      <div class="contact-links">
+        <a href="mailto:mails4anietor@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+        <a href="tel:+13068802835"><i class="fas fa-phone"></i> 306-880-2835</a>
+        <a href="https://detectedu.wixsite.com/detected" target="_blank" rel="noopener"><i class="fas fa-globe"></i> DetectED</a>
+        <a href="#"><i class="fab fa-github"></i> GitHub</a>
+        <a href="#"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="container">
+    <p>© <span id="year"></span> Anie Udofia · Built with <i class="fas fa-heart"></i> and curiosity</p>
+  </footer>
+
+  <script>
+    // ---------- THEME TOGGLE ----------
+    const toggle = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+
+    let dark = false;
+    function setTheme(isDark) {
+      dark = isDark;
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      icon.className = dark ? 'fas fa-moon' : 'fas fa-sun';
+      label.textContent = dark ? 'Dark' : 'Light';
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    }
+
+    toggle.addEventListener('click', () => setTheme(!dark));
+
+    // Load saved theme
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') setTheme(true);
+    else if (saved === 'light') setTheme(false);
+    else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) setTheme(true);
+
+    // ---------- GREET BUTTON ----------
+    const greetBtn = document.getElementById('greetBtn');
+    const greetMsg = document.getElementById('greetMessage');
+    greetBtn.addEventListener('click', () => {
+      greetMsg.innerHTML = '👋 Thanks for stopping by! I\'d love to connect about research, AI, or health innovation.';
+      greetBtn.innerHTML = '<i class="fas fa-check"></i> Already said hi!';
+      greetBtn.disabled = true;
+      greetBtn.style.opacity = '0.6';
+    });
+
+    // ---------- AUTO YEAR ----------
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---------- ANIMATED STAT COUNTERS ----------
+    const statNumbers = document.querySelectorAll('.stat-number');
+    statNumbers.forEach(el => {
+      const original = el.textContent;
+      const num = parseInt(original);
+      if (!isNaN(num) && !original.includes('+')) {
+        let current = 0;
+        const increment = Math.ceil(num / 35);
+        const interval = setInterval(() => {
+          current += increment;
+          if (current >= num) {
+            current = num;
+            clearInterval(interval);
+          }
+          el.textContent = current;
+        }, 25);
+      }
+    });
+
+    // ---------- SCROLL FADE-IN ----------
+    const cards = document.querySelectorAll('.exp-card, .award-item, .about-card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.12 });
+
+    cards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(24px)';
+      card.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+      observer.observe(card);
+    });
+  </script>
+</body>
+</html>
